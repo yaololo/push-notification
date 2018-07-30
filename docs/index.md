@@ -1,63 +1,65 @@
 ## Push Notifications
 
 Push notification service make use of two API
-  - the Notification API to display the messages
-  - the Push API to handle the messages that are pushed to the client from the server via Push service used by browser
+
+- the Notification API to display the messages
+- the Push API to handle the messages that are pushed to the client from the server via Push service used by browser
 
 ###### Service Worker
->A Service Worker is programmable proxy between your web page and the network, providing the ability to intercept and cache network requests, effectively giving you the ability to create an offline-first experience for your app. (***Source*** : [Service Workers explained](https://flaviocopes.com/service-workers/))
 
+> A Service Worker is programmable proxy between your web page and the network, providing the ability to intercept and cache network requests, effectively giving you the ability to create an offline-first experience for your app. (**_Source_** : [Service Workers explained](https://flaviocopes.com/service-workers/))
 
 A service worker is a piece of Javascript code that runs at the background of client's browser.
 
 Common useage of service worker will be:
->- Background data synchronization
->- Responding to resource requests from other origins
->- Receiving centralized updates to expensive-to-calculate data such as geolocation or gyroscope, so multiple pages can make use of one set of data
->- Client-side compiling and dependency management of CoffeeScript, less, CJS/AMD modules, etc. for dev purposes
->- Hooks for background services
->- Custom templating based on certain URL patterns
->- Performance enhancements, for example pre-fetching resources that the user is likely to need in the near future, such as the next few pictures in a photo album.
->- Reacting to push message
-> ( ***Source*** : [Service Worker API - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) )
-<br>
+
+> - Background data synchronization
+> - Responding to resource requests from other origins
+> - Receiving centralized updates to expensive-to-calculate data such as geolocation or gyroscope, so multiple pages can make use of one set of data
+> - Client-side compiling and dependency management of CoffeeScript, less, CJS/AMD modules, etc. for dev purposes
+> - Hooks for background services
+> - Custom templating based on certain URL patterns
+> - Performance enhancements, for example pre-fetching resources that the user is likely to need in the near future, such as the next few pictures in a photo album.
+> - Reacting to push message
+>   ( **_Source_** : [Service Worker API - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) )
+>   <br>
 
 Life cycle of service worker on its first installation
 
->![Screen Shot 2018-07-27 at 4.44.52 PM.png](:storage/be5c21d1-f09e-431e-a882-d0ff5e2cd1e4/634af386.png)
->Source: [Service Workers: an Introduction  |  Web Fundamentals  |  Google Developers](https://developers.google.com/web/fundamentals/primers/service-workers/)
+> ![Screen Shot 2018-07-27 at 4.44.52 PM.png](:storage/be5c21d1-f09e-431e-a882-d0ff5e2cd1e4/634af386.png)
+>
+> (**_Source_**: [Service Workers: an Introduction  |  Web Fundamentals  |  Google Developers](https://developers.google.com/web/fundamentals/primers/service-workers/))
 
 In general the life cycle will be:
-1. Download
-2. Install
-3. Activate
 
-
+1.  Download
+2.  Install
+3.  Activate
 
 ###### Work flows of push notifications:
-1. client side allows the notification service and it will subscribe for notification service. The `'subscription'` will be sent to the application server.
-        - the `'subscription'` format will be like this
+
+1.  client side allows the notification service and it will subscribe for notification service. The `'subscription'` will be sent to the application server. - the `'subscription'` format will be like this
+
     ```js
-      { 
+      {
         endpoint:  
         expirationTime: null,
-        keys: { 
+        keys: {
           p256dh: (string) ,
           auth: ()
-        } 
+        }
       }
     ```
 
-2. Send subscription to application server. Server will save all the subscriptions from different users in database.
-3. Push notifications to users by using the subscriptions collected previously. (A push event is sent to client side)
-4. Service workers will always be listening to the push event and act accordingly once the push event is triggered.
-<br>
+2.  Send subscription to application server. Server will save all the subscriptions from different users in database.
+3.  Push notifications to users by using the subscriptions collected previously. (A push event is sent to client side)
+4.  Service workers will always be listening to the push event and act accordingly once the push event is triggered.
+    <br>
 
 ###### Setup your own push notification service with Node.js and Express.js
 
 You need to have node environment for this tutorial
 
-  
     `npm init`
     Run `npm i express web-push body-parser` to install express, web-push and body-parser library
     In package.json file put in the follwoing code
@@ -65,12 +67,12 @@ You need to have node environment for this tutorial
       "start": "node index.js"
     }
 
-
 step 1:
 Create client folder and create client.js inside the folder.
 We first need to check if the user browser support service worker, if the service worker support servive worker, wen then need to register the service worker.
 
 Keys are generated by command `./node_modules/.bin/web-push generate-vapid-keys`. You need to hide the keys. Public key is used by both client and server. Private key is only used by server (is used in step 2)
+
 ```js
 const publicVapidKey =
   "BJthRQ5myDgc7OSXzPCMftGw-n16F7zQBEN7EUD6XxcfTTvrLGWSIG7y_JxiWtVlCFua0S8MTB5rPziBqNx1qIo";
@@ -78,8 +80,7 @@ const publicVapidKey =
 // check if the browser support service worker
 if ("serviceWorker" in navigator) {
   //if support call send()
-  send().catch(err => console.error(err)); 
-  
+  send().catch(err => console.error(err));
 }
 
 // Register SW, Register Push, Send Push
@@ -98,7 +99,6 @@ async function send() {
   });
   console.log("Push Registered...");
   //subscription now has an endpoint and keys
-  
 
   // Send registered subscription to server
   await fetch("/subscribe", {
@@ -113,7 +113,7 @@ async function send() {
 
 //public key encription function
 function urlBase64ToUint8Array(base64String) {
-  const padding = "=".repeat((4 - base64String.length % 4) % 4);
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding)
     .replace(/\-/g, "+")
     .replace(/_/g, "/");
@@ -129,6 +129,7 @@ function urlBase64ToUint8Array(base64String) {
 ```
 
 Step 2: Screate index.js
+
 Create index.js file at root directory. This will be the exoress server file that handle user subscriptions and the push notifications to users.
 
 ```javascript
@@ -177,7 +178,9 @@ app.listen(port, () => console.log(`Server started on port` + port));
 ```
 
 step 3:
+
 Create worker.js in client folder.
+
 ```js
 //service worker will always listen to "push" event
 self.addEventListener("push", e => {
@@ -190,13 +193,15 @@ self.addEventListener("push", e => {
   });
 });
 ```
-stpe 4 
+
+stpe 4:
+
 Now run `npm run start` and go to `localhost:5000` in your browser, you should receive a notification.
 
- 
 <br>
 
 Credit to :
+
 - [YouTube](https://www.youtube.com/watch?v=HlYFW2zaYQM&t=423s&pbjreload=10)
 
 - [Intro to Web Push Notifications with English - CC subtitles (closed captions) and transcript](http://www.yousubtitles.com/Intro-to-Web-Push-Notifications-id-1210061)
