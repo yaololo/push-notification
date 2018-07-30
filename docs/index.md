@@ -11,7 +11,7 @@ Push notification service make use of two API
 
 A service worker is a piece of Javascript code that runs at the background of client's browser.
 
-Common useage of service worker will be:
+Common usages of service worker will be:
 
 > - Background data synchronization
 > - Responding to resource requests from other origins
@@ -61,7 +61,7 @@ You need to have node environment for this tutorial
 
     `npm init`
     Run `npm i express web-push body-parser` to install express, web-push and body-parser library
-    In package.json file put in the follwoing code
+    In package.json file put in the following code
     "scripts": {
       "start": "node index.js"
     }
@@ -193,7 +193,7 @@ self.addEventListener("push", e => {
 });
 ```
 
-stpe 4:
+step 4:
 
 Now run `npm run start` and go to `localhost:5000` in your browser, you should receive a notification.
 
