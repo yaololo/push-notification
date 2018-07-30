@@ -26,7 +26,7 @@ Common useage of service worker will be:
 
 Life cycle of service worker on its first installation
 
-> ![Screen Shot 2018-07-27 at 4.44.52 PM.png](:storage/be5c21d1-f09e-431e-a882-d0ff5e2cd1e4/634af386.png)
+> ![Screen Shot 2018-07-27 at 4.44.52 PM.png](SWlifecycle.png)
 >
 > (**_Source_**: [Service Workers: an Introduction  |  Web Fundamentals  |  Google Developers](https://developers.google.com/web/fundamentals/primers/service-workers/))
 
@@ -206,4 +206,4 @@ Credit to :
 
 - [Intro to Web Push Notifications with English - CC subtitles (closed captions) and transcript](http://www.yousubtitles.com/Intro-to-Web-Push-Notifications-id-1210061)
 
-Please spend some time to watch the video, especially the second video.
+Please spend some time to watch the video, especially the second video to understand more about service worker.
