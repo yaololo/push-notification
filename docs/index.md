@@ -26,7 +26,7 @@ Common useage of service worker will be:
 
 Life cycle of service worker on its first installation
 
-> ![](https://github.com/yaololo/push-notification/blob/master/public/SWlifecycle.png) ><br>
+> ![](https://github.com/yaololo/push-notification/blob/master/public/SWlifecycle.png)<br>
 > (**_Source_**: [Service Workers: an Introduction  |  Web Fundamentals  |  Google Developers](https://developers.google.com/web/fundamentals/primers/service-workers/))
 
 In general the life cycle will be:
